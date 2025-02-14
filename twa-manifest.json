@@ -1,0 +1,43 @@
+{
+  "packageId": "xyz.jessejesse.ascii.twa",
+  "host": "ascii.jessejesse.xyz",
+  "name": "ASCII",
+  "launcherName": "ASCII",
+  "display": "standalone",
+  "themeColor": "#FFFFFF",
+  "themeColorDark": "#000000",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#FFFFFF",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://ascii.jessejesse.xyz/icon-512.png",
+  "maskableIconUrl": "https://ascii.jessejesse.xyz/web-app-manifest-512x512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "/Users/jesseroper/Desktop/40/android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "3",
+  "appVersionCode": 3,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://ascii.jessejesse.xyz/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://ascii.jessejesse.xyz/",
+  "minSdkVersion": 21,
+  "orientation": "default",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "appVersion": "3"
+}

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+    <meta name="title" content="Image to ASCII">
+    <meta name="description" content="Convert images into ASCII art instantly. Upload your image and transform it into stunning text-based artwork.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ascii.JesseJesse.xyz">
+    <meta property="og:title" content="Image to ASCII">
+    <meta property="og:description" content="Convert images into ASCII art instantly. Upload your image and transform it into stunning text-based artwork.">
+    <meta property="og:image" content="https://ascii.JesseJesse.xyz/og.png">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Image to ASCII">
+    <meta property="twitter:description" content="Convert images into ASCII art instantly. Upload your image and transform it into stunning text-based artwork.">
+    <meta property="twitter:image" content="https://ascii.JesseJesse.xyz/og.png">
+    <meta name="author" content="JesseJesse.xyz">
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <title>Image to ASCII Converter</title>
+    <style>
+        body {
+            font-family: monospace;
+            text-align: center;
+            background-color: #222 !important;
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: auto;
+            padding: 10px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .demo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .demo-container img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+        }
+
+        select, input, button {
+            padding: 8px;
+            font-size: 14px;
+            background: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: auto;
+            max-width: 300px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #38725b;
+            border-radius: 5px;
+            padding: 10px 20px;
+        }
+
+        button:hover {
+            background: green;
+        }
+
+        @media (max-width: 600px) {
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            button {
+                width: auto;
+                max-width: 250px;
+            }
+        }
+
+        #ascii-output {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 8px;
+            line-height: 8px;
+            display: inline-block;
+            text-align: left;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            z-index: -1;
+        }
+
+        .file-input-wrapper label {
+            display: inline-block;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+        }
+
+        .file-name {
+            display: inline-block;
+            padding: 5px;
+            background-color: #333;
+            color: white;
+            margin-left: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .controls {
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+            }
+
+            select, input, button {
+                width: auto;
+                max-width: 300px;
+            }
+
+            button {
+                width: 95%;
+            }
+        }
+
+        footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            left: -1%;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Image to ASCII</h1>
+      
+        <div class="demo-container">
+            <img src="icon.png" alt="icon">Before
+            <p>¯\_(ツ)_/¯</p>After
+            <img src="demo2.png" alt="Demo2">
+        </div>
+
+        <div class="controls">
+            <div class="file-input-wrapper">
+                <input type="file" id="image-input" accept="image/png, image/jpeg">
+                <label for="image-input">Upload Photo</label>
+                <span class="file-name" id="file-name">No file selected</span>
+            </div>
+            <label><input type="checkbox" id="bg-toggle">&nbsp;BG</label>
+            <label>
+                <select id="char-set">
+                    <option value="@%#*+=-:. ">Symbols</option>
+                    <option value=" .:-=+*#%@">Inverted</option>
+                    <option value="0123456789">Numbers</option>
+                </select>
+            </label>
+            <label>
+                <input type="checkbox" id="color-toggle" checked>Color
+            </label>
+
+            <button onclick="downloadAscii()">Download</button>
+        </div>
+
+        <pre id="ascii-output">
+        </pre>
+    </div>
+
+    <script>
+        const input = document.getElementById("image-input");
+        const fileNameSpan = document.getElementById("file-name");
+        const asciiOutput = document.getElementById("ascii-output");
+        const bgToggle = document.getElementById("bg-toggle");
+        const charSetSelect = document.getElementById("char-set");
+        const colorToggle = document.getElementById("color-toggle");
+
+        let lastImage = null;
+
+        input.addEventListener("change", function () {
+            const file = input.files[0];
+            if (file) {
+                fileNameSpan.textContent = file.name;
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        lastImage = img;
+                        convertToAscii(img);
+                    };
+                };
+                reader.readAsDataURL(file);
+            } else {
+                fileNameSpan.textContent = "No file selected";
+            }
+        });
+
+        function convertToAscii(img) {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            const width = 100;
+            const height = (img.height / img.width) * width;
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+            const imgData = ctx.getImageData(0, 0, width, height);
+            const pixels = imgData.data;
+            const charSet = charSetSelect.value;
+
+            let ascii = "";
+            let htmlAscii = "";
+
+            for (let i = 0; i < pixels.length; i += 4 * width) {
+                for (let j = 0; j < width * 4; j += 4) {
+                    const r = pixels[i + j];
+                    const g = pixels[i + j + 1];
+                    const b = pixels[i + j + 2];
+                    const alpha = pixels[i + j + 3];
+
+                    const brightness = (r + g + b) / 3;
+                    const charIndex = Math.floor((brightness / 255) * (charSet.length - 1));
+                    const char = charSet[charSet.length - 1 - charIndex];
+
+                    if (bgToggle.checked && alpha === 0) {
+                        ascii += " ";
+                        htmlAscii += " ";
+                    } else if (colorToggle.checked) {
+                        htmlAscii += `<span style="color: rgb(${r},${g},${b})">${char}</span>`;
+                        ascii += char;
+                    } else {
+                        ascii += char;
+                        htmlAscii += char;
+                    }
+                }
+                ascii += "\n";
+                htmlAscii += "<br>";
+            }
+
+            if (colorToggle.checked) {
+                asciiOutput.innerHTML = htmlAscii;
+            } else {
+                asciiOutput.textContent = ascii;
+            }
+        }
+
+        function downloadAscii() {
+            const asciiText = asciiOutput.innerText;
+            const htmlAscii = asciiOutput.innerHTML;
+
+            if (colorToggle.checked) {
+                const htmlContent = `
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>ASCII Art</title>
+                        <style>
+                            body { font-family: monospace; background-color: #222; color: white; }
+                            pre { white-space: pre-wrap; word-wrap: break-word; }
+                        </style>
+                    </head>
+                    <body>
+                      <center>  <pre>${htmlAscii}</pre></center>
+                    </body>
+                    </html>
+                `;
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'ascii-pic.html';
+                link.click();
+            } else {
+                const blob = new Blob([asciiText], { type: 'text/plain' });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = "ascii-pic.txt";
+                link.click();
+            }
+        }
+
+        bgToggle.addEventListener("change", () => lastImage && convertToAscii(lastImage));
+        colorToggle.addEventListener("change", () => lastImage && convertToAscii(lastImage));
+        charSetSelect.addEventListener("change", () => lastImage && convertToAscii(lastImage));
+    </script>
+    <footer style="position: fixed; bottom: 10px; width: 100%; text-align: center;">
+       
+        <a href="https://ascii.jessejesse.xyz/ascii.apk" target="_blank" style="color: green; text-decoration: none; font-size: 14px;">
+            &nbsp;Android App
+        </a>&nbsp;
+        <br>&nbsp;&nbsp;
+        <a href="https://JesseJesse.xyz" target="_blank" style="color: grey; text-decoration: none; font-size: 14px;">
+            JesseJesse.xyz
+        </a>&nbsp;
+        <br>&nbsp;&nbsp;
+        <a href="https://sudo-soldier-ascii.hf.space" target="_blank" style="color: yellow; text-decoration: none; font-size: 14px;">
+           Huggingface.co
+        </a>
+    </footer>
+
+</body>
+</html>
+
