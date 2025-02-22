@@ -107,13 +107,14 @@
         #ascii-output {
             white-space: pre-wrap;
             word-wrap: break-word;
-            font-size: 8px;
-            line-height: 8px;
+            font-size: 4px;
+            line-height: 4px;
             display: inline-block;
             text-align: left;
             max-width: 100%;
             overflow-x: hidden;
         }
+
 
         .file-input-wrapper {
             position: relative;
@@ -175,11 +176,13 @@
 <body>
     <div class="container">
         <h1>Image to ASCII</h1>
+        <a class="github-button" href="https://github.com/sudo-self/ascii" data-color-scheme="no-preference: light; light: light; dark: light_high_contrast;" data-icon="octicon-star" data-size="large" aria-label="Star sudo-self/ascii on GitHub">Star</a>
       
         <div class="demo-container">
             <img src="icon.png" alt="icon">Before
             <p>¯\_(ツ)_/¯</p>After
             <img src="demo2.png" alt="Demo2">
+                
         </div>
 
         <div class="controls">
@@ -198,7 +201,7 @@
             </label>
             <label>
                 <input type="checkbox" id="color-toggle" checked>Color
-            </label>
+            </label><br />
 
             <button onclick="downloadAscii()">Download</button>
         </div>
@@ -328,8 +331,7 @@
         <a href="https://ascii.jessejesse.xyz/ascii.apk" target="_blank" style="color: green; text-decoration: none; font-size: 14px;">
             &nbsp;Android
         </a>&nbsp;
-        <br>&nbsp;&nbsp;
-<a class="github-button" href="https://github.com/sudo-self/ascii" data-color-scheme="no-preference: light; light: light; dark: light_high_contrast;" data-icon="octicon-star" data-size="large" aria-label="Star sudo-self/ascii on GitHub">Star</a>&nbsp;
+        <br>&nbsp;
         <br>&nbsp;&nbsp;
         <a href="https://sudo-soldier-ascii.hf.space" target="_blank" style="color: yellow; text-decoration: none; font-size: 14px;">
            &nbsp;Huggingface
